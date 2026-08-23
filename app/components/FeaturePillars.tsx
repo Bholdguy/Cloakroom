@@ -9,11 +9,11 @@ const PILLARS = [
       </svg>
     ),
     tagline: "PRIVACY INFRASTRUCTURE",
-    badge: "MASP POOL",
+    badge: "STRK20 PRIVACY POOL",
     title: "Universal Anonymity",
-    subtitle: "Multi-Asset Shielded Pool",
-    body: "All assets enter a shared MASP pool, breaking the on-chain link between sender and recipient. The anonymity set grows with every participant — your payroll is indistinguishable from any other shielded transfer.",
-    detail: "Pool depth: $12.4M · 4,200 notes",
+    subtitle: "Canonical Privacy Pool",
+    body: "Assets interact with the live STRK20 privacy pool, breaking the on-chain link between sender and recipient. Your payroll is indistinguishable from any other shielded transfer.",
+    detail: "Pool depth: Public",
     tags: ["ZK-STARKs", "Poseidon Hash", "Merkle Tree"],
   },
   {
@@ -25,12 +25,12 @@ const PILLARS = [
       </svg>
     ),
     tagline: "ZERO COORDINATION",
-    badge: "STEALTH ADDRESSES",
+    badge: "PRIVATE TRANSFERS",
     title: "Stealth Payouts",
-    subtitle: "Non-Interactive Stealth Address Dispatcher",
-    body: "Recipients never expose a reusable address. The dispatcher generates a one-time stealth address per payment using the recipient's ephemeral key, derived on-device. No metadata, no correlation, no round-trips.",
-    detail: "Derivation: ECDH + Poseidon · 0 round-trips",
-    tags: ["ECDH", "One-Time Addresses", "Gasless"],
+    subtitle: "Non-Interactive Transfers",
+    body: "Recipients never expose a reusable address. A one-time stealth address is generated per payment using the recipient's ephemeral key, derived on-device.",
+    detail: "Derivation: ECDH + Poseidon",
+    tags: ["ECDH", "One-Time Addresses"],
   },
   {
     id: "compliance",
@@ -42,12 +42,12 @@ const PILLARS = [
       </svg>
     ),
     tagline: "REGULATORY GRADE",
-    badge: "COMPLIANCE READY",
-    title: "Proof of Innocence",
+    badge: "CRYPTOGRAPHIC PRIVACY",
+    title: "Zero-Knowledge Verification",
     subtitle: "Association Sets & Scoped Viewing Keys",
-    body: "Generate a zero-knowledge Proof of Innocence — cryptographically proving funds do not originate from a sanctioned source. Issue time-scoped viewing keys to auditors for OFAC, EU DORA, and MiCA compliance.",
-    detail: "Compatible with OFAC, EU DORA, MiCA",
-    tags: ["OFAC", "EU DORA", "MiCA"],
+    body: "Cryptographically prove the correctness of the payroll batch using ZK-STARKs. Issue time-scoped viewing keys to auditors for compliance.",
+    detail: "Standard Cryptographic Proofs",
+    tags: ["ZK-Proofs", "Viewing Keys"],
   },
 ];
 

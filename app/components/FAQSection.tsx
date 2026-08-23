@@ -5,8 +5,8 @@ import { useState } from "react";
 const FAQS = [
   {
     id: "faq-masp",
-    q: "What is a Multi-Asset Shielded Pool (MASP)?",
-    a: "A MASP is a smart contract that accepts multiple asset types into a single anonymity set. When you deposit STRK, USDC, or any STRK20 token, your transaction is blended with thousands of others. When you withdraw, there is no on-chain link back to your deposit — making surveillance mathematically intractable.",
+    q: "What is the STRK20 Privacy Pool?",
+    a: "The STRK20 Privacy Pool is a smart contract that accepts multiple asset types into a single anonymity set. When you deposit STRK or any STRK20 token, your transaction is blended with others.",
   },
   {
     id: "faq-stealth",
@@ -16,17 +16,17 @@ const FAQS = [
   {
     id: "faq-compliance",
     q: "How does Cloakroom achieve compliance without breaking privacy?",
-    a: "We use two mechanisms: (1) Scoped Viewing Keys that allow you to grant time-limited, counterparty-limited decryption to auditors without revealing anything beyond what you authorise. (2) Proof of Innocence — a ZK proof that cryptographically certifies your funds do not touch sanctioned addresses, fully verifiable without revealing the source.",
+    a: "We use Scoped Viewing Keys that allow you to grant time-limited, counterparty-limited decryption to auditors without revealing anything beyond what you authorise. This allows for standard cryptographic proofs during audits.",
   },
   {
     id: "faq-gas",
     q: "Do contributors need to hold STRK or ETH to claim?",
-    a: "No. Cloakroom integrates Starknet's native Account Abstraction paymasters to sponsor claim transactions entirely. Contributors receive a one-time claim ticket off-chain and can claim their salary without ever holding a single native token for gas — removing the last friction point for global teams.",
+    a: "Yes. Since gas sponsorship is not yet implemented, contributors must hold a small amount of ETH or STRK to pay for network fees when claiming their shielded funds.",
   },
   {
     id: "faq-starknet",
     q: "Why build on Starknet specifically?",
-    a: "Starknet provides native ZK-STARK proof verification at the execution layer, making on-chain proof verification cheap and fast. Its Account Abstraction model enables paymasters at the protocol level. The Stwo prover achieves sub-2-second proof times in-browser — essential for a responsive payroll UI.",
+    a: "Starknet provides native ZK-STARK proof verification at the execution layer, making on-chain proof verification cheap and fast. The Stwo prover achieves fast proof times in-browser — essential for a responsive payroll UI.",
   },
 ];
 

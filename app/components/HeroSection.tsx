@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 
 const STATS = [
-  { label: "Total TVL", value: "$14.2M", icon: "💰" },
-  { label: "Shielded Txs", value: "18,492", icon: "🛡" },
-  { label: "Prover Time", value: "1.4s", icon: "⚡" },
-  { label: "Gas Paid", value: "$0.00", icon: "⛽" },
+  { label: "Network", value: "Sepolia", icon: "🔗" },
+  { label: "Status", value: "Dev", icon: "🛠" },
 ];
 
 export default function HeroSection() {

@@ -47,9 +47,9 @@ const ROLES = [
       },
       {
         n: "02",
-        title: "Gasless Claim via Paymaster",
-        body: "Submit the Merkle inclusion proof to the Anonymiser contract. The Starknet paymaster sponsors the transaction — no native token needed.",
-        code: "Anonymiser.claim(proof, nullifier) → sponsored by paymaster",
+        title: "Submit Claim Transaction",
+        body: "Submit the Merkle inclusion proof to the Anonymiser contract. A standard Starknet gas fee is required to claim.",
+        code: "Anonymiser.claim(proof, nullifier)",
       },
       {
         n: "03",
@@ -76,12 +76,7 @@ const ROLES = [
         body: "Decrypt and verify each payment's amount, timestamp, and recipient class. Export a signed audit report. Wallet addresses remain shielded.",
         code: "audit.export({ format: 'PDF', signed: true }) → report_2026Q2.pdf",
       },
-      {
-        n: "03",
-        title: "Validate Proof of Innocence",
-        body: "Verify that no payment originates from a sanctioned address pool using the zero-knowledge Proof of Innocence.",
-        code: "PoI.verify(batch_root, sanctions_list) → { result: CLEAN, ts: … }",
-      },
+
     ],
   },
 ];

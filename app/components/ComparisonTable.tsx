@@ -1,7 +1,7 @@
 const FEATURES = [
   "Salary Privacy",
   "Vesting Protection",
-  "Proof of Innocence",
+  "Cryptographic Verification",
   "Gasless Onboarding",
   "Stealth Addresses",
   "Audit Compliance",

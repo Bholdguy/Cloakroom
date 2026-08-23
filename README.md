@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cloakroom
 
-## Getting Started
+Cloakroom is a web application and Starknet smart contract designed to facilitate private payroll and vesting distributions on-chain.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Cloakroom's core architecture relies on the `PayrollAnonymizer.cairo` contract. This contract facilitates transactions by calling the `privacy_invoke` function on the live STRK20 privacy pool via an `InvokeExternal` action.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Status
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Smart Contracts:** The `PayrollAnonymizer.cairo` contract compiles successfully against `PRIVACY-0.14.3-RC.0` and Cairo `2.17.0`. 
+- **Deployment:** The anonymizer contract has **not** been deployed to any network (testnet or mainnet). 
+- **Transactions:** There are currently zero live transactions or execution hashes in the repository.
+- **Testing:** There is no `snforge` test suite implemented at this time.
+- **Features:** Gasless claim flow via paymasters is not yet implemented.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Setup Instructions
 
-## Learn More
+### Frontend
+1. Ensure you have Node.js (v20 or higher recommended) installed.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+### Contracts
+1. Ensure you have Scarb `2.17.0` and Starknet Foundry `0.59.0` installed.
+2. Navigate to the contracts directory:
+   ```bash
+   cd contracts
+   ```
+3. Build the contracts:
+   ```bash
+   scarb build
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Live Site
+The frontend is deployed on Vercel. Ensure the Root Directory is left blank/empty in Vercel settings so it builds from the repository root.

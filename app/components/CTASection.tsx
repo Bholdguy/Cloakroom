@@ -103,9 +103,9 @@ export default function CTASection() {
             <div style={{ borderTop: "3px solid rgba(0,0,0,0.25)" }}>
               <div className="grid grid-cols-3">
                 {[
-                  { label: "Protocol TVL", value: "$14.2M" },
-                  { label: "Shielded Txs", value: "18,492" },
-                  { label: "Batches Shielded", value: "4,200+" },
+                  { label: "Network", value: "Sepolia" },
+                  { label: "Status", value: "Development" },
+                  { label: "Transactions", value: "0" },
                 ].map(({ label, value }, i) => (
                   <div
                     key={label}

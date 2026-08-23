@@ -20,24 +20,24 @@ const ARCH_STEPS = [
     tag: "SDK",
     emoji: "📦",
     title: "STRK20 Privacy SDK + Starknet.js Middleware",
-    body: "The STRK20 Privacy SDK wraps Starknet.js to provide a clean abstraction over note creation, Merkle tree management, and stealth address derivation. All crypto runs in-browser.",
-    spec: "SDK: @cloakroom/strk20-sdk · Starknet.js v6",
+    body: "TypeScript and Next.js abstractions handle note creation, Merkle tree management, and stealth address derivation. All crypto runs in-browser.",
+    spec: "Frontend: TypeScript / Next.js",
   },
   {
     layer: "L4",
     tag: "RELAY",
     emoji: "⛽",
-    title: "Gas-Sponsored AA Relay",
-    body: "Transactions are routed through a Starknet Account Abstraction relay that sponsors gas using native paymasters. Employers and contributors never need to hold native tokens for fees.",
-    spec: "AA: Starknet native · Paymaster: ERC-4337 compatible",
+    title: "Wallet Transactions",
+    body: "Transactions are executed through standard Starknet wallets. Employers and contributors pay network fees normally.",
+    spec: "AA: Starknet native",
   },
   {
     layer: "L5",
     tag: "CONTRACTS",
     emoji: "📄",
-    title: "PayrollBatcher.cairo + MASP Pool",
-    body: "PayrollBatcher.cairo accepts the batch Merkle root and proof, verifies on-chain, and commits the shielded note set. The MASP pool manages the universal anonymity set for all assets.",
-    spec: "snforge audited · Max 30 txs/batch · Poseidon hash",
+    title: "PayrollAnonymizer.cairo + STRK20 Pool",
+    body: "PayrollAnonymizer.cairo invokes privacy_invoke on the STRK20 pool via an InvokeExternal action.",
+    spec: "Compiled via Scarb · Poseidon hash",
   },
 ];
 
@@ -46,7 +46,7 @@ const SECURITY_PROPS = [
   { label: "Hash Function", value: "Poseidon" },
   { label: "Commitment", value: "Merkle Tree" },
   { label: "Stealth Scheme", value: "ECDH + Poseidon" },
-  { label: "Formal Testing", value: "snforge (Starknet Foundry)" },
+  { label: "Formal Testing", value: "Pending" },
   { label: "Trusted Setup", value: "None" },
   { label: "Max Batch Size", value: "30 transactions" },
   { label: "Proof Latency", value: "< 4 s client-side" },
@@ -135,9 +135,9 @@ export default function ArchitectureSection() {
               className="px-5 py-4 flex items-center gap-2"
               style={{ borderTop: "3px solid #000", background: "#F8F9FA" }}
             >
-              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: "#34D399" }} />
-              <span className="font-mono text-[10px] uppercase tracking-widest font-bold" style={{ color: "#059669" }}>
-                Snforge suite passing
+              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: "#FBBF24" }} />
+              <span className="font-mono text-[10px] uppercase tracking-widest font-bold" style={{ color: "#D97706" }}>
+                Snforge suite pending
               </span>
             </div>
           </div>
