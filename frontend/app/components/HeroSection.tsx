@@ -1,18 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 
-const STATS = [
-  { label: "Network", value: "Sepolia", icon: "🔗" },
-  { label: "Status", value: "Dev", icon: "🛠" },
-];
+
+
 
 export default function HeroSection() {
-  const [pulse, setPulse] = useState(true);
-  useEffect(() => {
-    const id = setInterval(() => setPulse((p) => !p), 1400);
-    return () => clearInterval(id);
-  }, []);
 
   return (
     <section className="w-full min-h-[88vh] flex flex-col items-center justify-center px-4 py-24 text-center">
@@ -73,64 +65,7 @@ export default function HeroSection() {
         </a>
       </div>
 
-      {/* Live Stats Card */}
-      <div
-        className="w-full max-w-xl rounded-2xl overflow-hidden bg-white"
-        style={{ border: "3px solid #000", boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
-      >
-        {/* Card header */}
-        <div
-          className="flex items-center justify-between px-5 py-3.5 bg-black"
-          style={{ borderBottom: "3px solid #000" }}
-        >
-          <div className="flex items-center gap-3">
-            <span
-              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-              style={{
-                background: "#34D399",
-                opacity: pulse ? 1 : 0.3,
-                transition: "opacity 0.4s ease",
-              }}
-            />
-            <span
-              className="font-mono text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-              style={{ background: "#7B5FF0", color: "#fff", fontSize: "0.65rem" }}
-            >
-              STRK20 MAINNET
-            </span>
-          </div>
-          <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: "#A78BFA" }}>
-            LIVE
-          </span>
-        </div>
 
-        {/* 2×2 grid */}
-        <div className="grid grid-cols-2">
-          {STATS.map((s, i) => (
-            <div
-              key={s.label}
-              className="flex flex-col gap-1 px-6 py-5"
-              style={{
-                borderRight: i % 2 === 0 ? "3px solid #000" : "none",
-                borderBottom: i < 2 ? "3px solid #000" : "none",
-              }}
-            >
-              <span
-                className="font-mono text-[10px] uppercase tracking-widest text-black/40 flex items-center gap-1.5"
-              >
-                <span>{s.icon}</span>
-                {s.label}
-              </span>
-              <span
-                className="font-display font-bold text-2xl leading-none text-black"
-                style={{ fontFamily: "var(--font-space-grotesk)", letterSpacing: "-0.02em" }}
-              >
-                {s.value}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }
