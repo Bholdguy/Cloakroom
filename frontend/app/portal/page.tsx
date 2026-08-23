@@ -16,7 +16,7 @@ export default function PortalPage() {
   // Trigger the Starknet wallet connection modal
   const handleConnect = async () => {
     try {
-      const starknet = await connect();
+      const starknet = (await connect()) as any;
       
       if (!starknet) {
         alert("Please install a Starknet wallet like Argent X or Braavos.");
