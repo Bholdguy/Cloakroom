@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+contracts/target/
+.snfoundry_cache/
+snfoundry_trace/
+coverage/
+profile/
+backend/.cloakroom-run-state.json
+*.vesting-secrets.json

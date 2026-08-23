@@ -1,0 +1,19 @@
+# Starknet Foundry v0.59.0 — sncast profiles.
+# Docs: https://foundry-rs.github.io/starknet-foundry/appendix/snfoundry-toml.html
+# `network` uses sncast presets (no invented RPC URLs). Override with --url as needed.
+
+[sncast.sepolia]
+network = "sepolia"
+account = "cloakroom"
+wait-params = { timeout = 300, retry-interval = 5 }
+block-explorer = "Voyager"
+show-explorer-links = true
+scarb-profile = "release"
+
+[sncast.mainnet]
+network = "mainnet"
+account = "cloakroom"
+wait-params = { timeout = 500, retry-interval = 10 }
+block-explorer = "Voyager"
+show-explorer-links = true
+scarb-profile = "release"
