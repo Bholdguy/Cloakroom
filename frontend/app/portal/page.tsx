@@ -1,7 +1,40 @@
-import React from 'react';
+'use client'; // Required for interactivity in Next.js App Router
+
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { connect, disconnect } from 'get-starknet';
 
 export default function PortalPage() {
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
+  // Trigger the Starknet wallet connection modal
+  const handleConnect = async () => {
+    try {
+      const starknet = await connect();
+      
+      if (!starknet) {
+        alert("Please install a Starknet wallet like Argent X or Braavos.");
+        return;
+      }
+      
+      await starknet.enable();
+      setWalletAddress(starknet.selectedAddress || null);
+    } catch (error) {
+      console.error("Wallet connection failed:", error);
+    }
+  };
+
+  // Disconnect the wallet
+  const handleDisconnect = async () => {
+    await disconnect();
+    setWalletAddress(null);
+  };
+
+  // Helper function to format the long address cleanly
+  const truncateAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
   return (
     <div 
       className="min-h-screen bg-[#F8F9FA] flex flex-col items-center justify-center font-sans text-center px-4" 
@@ -29,13 +62,31 @@ export default function PortalPage() {
         The employer dashboard and Multi-Asset Shielded Pool interface live here. Connect your Starknet AA wallet to proceed.
       </p>
       
-      {/* Connect Wallet Button */}
-      <button className="bg-[#7B5FF0] text-white font-bold py-4 px-8 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
-        Connect Wallet
-      </button>
+      {/* Conditional Rendering: Show Address if connected, otherwise show Connect Button */}
+      {walletAddress ? (
+        <div className="flex flex-col items-center gap-4">
+          <div className="bg-[#86EFAC] text-[#14532D] font-bold py-4 px-8 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest flex items-center gap-3">
+            <span className="w-3 h-3 rounded-full bg-green-500 border border-black animate-pulse"></span>
+            {truncateAddress(walletAddress)}
+          </div>
+          <button 
+            onClick={handleDisconnect} 
+            className="text-xs font-bold text-gray-500 uppercase tracking-widest hover:text-black transition-colors underline"
+          >
+            Disconnect Wallet
+          </button>
+        </div>
+      ) : (
+        <button 
+          onClick={handleConnect}
+          className="bg-[#7B5FF0] text-white font-bold py-4 px-8 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+        >
+          Connect Wallet
+        </button>
+      )}
 
       {/* Back to Home Link */}
-      <Link className="mt-12 text-xs font-bold text-gray-500 uppercase tracking-widest hover:text-black transition-colors" href="/">
+      <Link className="mt-16 text-xs font-bold text-gray-500 uppercase tracking-widest hover:text-black transition-colors" href="/">
         &larr; Return to Landing Page
       </Link>
       
