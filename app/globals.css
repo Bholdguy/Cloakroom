@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  /* Page surface */
+  --color-bg: #F8F9FA;
+  /* Brand */
+  --color-violet: #7B5FF0;
+  --color-violet-dark: #5B3FD0;
+  --color-violet-light: #EDE9FE;
+  /* Cards */
+  --color-lavender-card: #C4B5FD;
+  --color-peach-card: #FDBA74;
+  --color-mint-card: #86EFAC;
+  --color-yellow-card: #FEF08A;
+  --color-pink-card: #FBCFE8;
+  /* Footer */
+  --color-footer-dark: #0B0F19;
+  /* Legacy */
+  --color-cream: #F4F1EA;
+  --color-obsidian: #0F1115;
+  --color-neon: #00FF66;
+  --color-lilac: #F8F7FC;
+}
+
+@layer base {
+  body {
+    background-color: #F8F9FA;
+    background-image: radial-gradient(#D1D5DB 1px, transparent 1px);
+    background-size: 32px 32px;
+    color: #000;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-space-grotesk), system-ui, sans-serif;
+    font-weight: 700;
+  }
+}
+
+@layer utilities {
+  /* ── Borders ─────────────────────────────────── */
+  .brutal-border {
+    border: 3px solid #000;
+  }
+  .brutal-border-2 {
+    border: 2px solid #000;
+  }
+
+  /* ── Shadows ─────────────────────────────────── */
+  .brutal-shadow {
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  }
+  .brutal-shadow-lg {
+    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  }
+  .brutal-shadow-sm {
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  }
+
+  /* ── Click state ─────────────────────────────── */
+  .brutal-active:active {
+    transform: translate(4px, 4px);
+    box-shadow: none !important;
+  }
+
+  /* ── Violet filled button ────────────────────── */
+  .btn-violet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7B5FF0;
+    color: #fff;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    font-family: var(--font-space-grotesk), system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.025em;
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.1s ease;
+    cursor: pointer;
+  }
+  .btn-violet:hover { background-color: #5B3FD0; }
+  .btn-violet:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+
+  /* ── Ghost/outline button ────────────────────── */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    color: #000;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    font-family: var(--font-space-grotesk), system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.025em;
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.1s ease;
+    cursor: pointer;
+  }
+  .btn-ghost:hover { background-color: #F3F0FF; }
+  .btn-ghost:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+
+  /* ── Section pill badge ──────────────────────── */
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background-color: #7B5FF0;
+    color: #fff;
+    border: 3px solid #000;
+    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+    font-family: var(--font-space-grotesk), system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
