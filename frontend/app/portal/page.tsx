@@ -14,8 +14,8 @@ const PAYROLL_ANONYMIZER_ADDRESS = '0x7d075ac3cc2c6a379d53641571cfc760870b732e8e
 const STRK_TOKEN = '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d';
 const SESSION_KEY_ID = '0x636c6f616b726f6f6d2d64656d6f2d31';
 const LOCK_AMOUNT = BigInt("1000000000000000000");
-const PROVER_URL = 'https://sepolia.prover.privacy.starknet.io';
-const DISCOVERY_URL = 'https://sepolia.indexer.privacy.starknet.io';
+const PROVER_URL = '/api/privacy/prover';
+const DISCOVERY_URL = '/api/privacy/indexer';
 const SEPOLIA_RPC_URL = 'https://starknet-sepolia.public.blastapi.io';
 
 const truncate = (s: string) => `${s.slice(0, 6)}...${s.slice(-4)}`;
