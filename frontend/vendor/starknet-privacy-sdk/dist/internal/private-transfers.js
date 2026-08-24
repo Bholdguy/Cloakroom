@@ -1,0 +1,62 @@
+/**
+ * Real PrivateTransfers implementation using Starknet contracts.
+ */
+import { ActionCompiler } from "./compiler.js";
+import { AbstractPrivateTransfers } from "./abstract-private-transfers.js";
+import { debugLog } from "../utils/logging.js";
+import { toBigInt, toHex } from "../utils/convert.js";
+import { screeningCalldataSuffix } from "./screening-calldata.js";
+import { poolModeForClassHash } from "./pool-mode.js";
+export class PrivateTransfers extends AbstractPrivateTransfers {
+    params;
+    constructor(params) {
+        super(params.account.address, params.viewingKeyProvider, params.discoveryProvider);
+        this.params = params;
+    }
+    async getCompiler() {
+        const viewingKey = await this.params.viewingKeyProvider.getViewingKey();
+        return new ActionCompiler(this.user, viewingKey, this.params.discoveryProvider, toBigInt(this.params.poolContractAddress));
+    }
+    async createProofInvocation(actions, options) {
+        // Get viewing key for both compiler and calldata
+        const viewingKey = await this.params.viewingKeyProvider.getViewingKey();
+        const compiler = new ActionCompiler(this.user, viewingKey, this.params.discoveryProvider, toBigInt(this.params.poolContractAddress));
+        // Compile actions
+        const { clientActions, registry, warnings } = await compiler.compile(actions, options);
+        // Create invocation for proving
+        const details = await this.params.provingProvider.getDefaultDetails();
+        const invocation = await this.params.proofInvocationFactory.create({ ...this.params.account, viewingKey }, this.params.poolContractAddress, clientActions, details);
+        return { invocation, registry, warnings };
+    }
+    invalidateProofNonceCache() {
+        this.params.provingProvider.invalidateNonceCache?.();
+    }
+    async executeWithInvocation({ invocation, registry, warnings }, provingBlockId) {
+        const proof = await this.params.provingProvider.prove(invocation, provingBlockId);
+        // proof.output is the L2-to-L1 message payload: [class_hash, ...serialized_actions].
+        // Strip the class_hash prefix — apply_actions expects only Span<ServerAction>.
+        const serverActionsCalldata = proof.output.slice(1);
+        // Parse and log server actions for debugging
+        const parsedOutput = () => this.params.proofInvocationFactory.parseOutput(serverActionsCalldata);
+        debugLog("private-transfers", "execute", "parsed server actions", parsedOutput);
+        // The pool version — not signature presence — decides the calldata shape:
+        // a screening-capable pool expects a trailing Option<ScreeningAttestation>,
+        // the pre-screening pool none. poolMode overrides detection for pools
+        // whose class hash isn't pinned.
+        const mode = this.params.poolMode ?? poolModeForClassHash(proof.output[0]);
+        const screeningSuffix = mode === "screening" ? screeningCalldataSuffix(proof.additionalData) : [];
+        return {
+            callAndProof: {
+                call: {
+                    contractAddress: toHex(this.params.poolContractAddress),
+                    entrypoint: "apply_actions",
+                    calldata: [...serverActionsCalldata, ...screeningSuffix],
+                },
+                proof,
+            },
+            registry,
+            warnings,
+        };
+    }
+}
+//# sourceMappingURL=private-transfers.js.map
