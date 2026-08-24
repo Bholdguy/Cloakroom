@@ -16,7 +16,7 @@ const SESSION_KEY_ID = '0x636c6f616b726f6f6d2d64656d6f2d31';
 const LOCK_AMOUNT = BigInt("1000000000000000000");
 const PROVER_URL = 'https://sepolia.prover.privacy.starknet.io';
 const DISCOVERY_URL = 'https://sepolia.indexer.privacy.starknet.io';
-const SEPOLIA_RPC_URL = 'https://free-rpc.nethermind.io/sepolia-juno/';
+const SEPOLIA_RPC_URL = 'https://starknet-sepolia.public.blastapi.io';
 
 const truncate = (s: string) => `${s.slice(0, 6)}...${s.slice(-4)}`;
 
