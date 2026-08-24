@@ -10,8 +10,11 @@
       "tag_and_class_hash": "https://github.com/starkware-libs/starknet-privacy/blob/main/README.md (compatibility matrix, Privacy Pool row)",
       "mainnet_address": "https://github.com/starkience/strk20-hackathon/blob/main/docs/MAINNET-DAY-0.md"
     },
-    "unconfirmed": {
-      "sepolia_address": "Not published in the compatibility matrix, the privacy-pool README deploy section, MAINNET-DAY-0, or the STRK20 starter kit. Fill in from a class-hash lookup on Sepolia Voyager/StarkScan or from the private builders group before calling the pool on Sepolia."
+    "unconfirmed": {}
+  },
+  "payroll_anonymizer": {
+    "addresses": {
+      "sepolia": "0x7d075ac3cc2c6a379d53641571cfc760870b732e8e3fece6f9f7bf7196dc6ac",
+      "_deprecated_sepolia": "0x028b6d0e4bec0796b7d071c8aca43c377bb0f1a3caab4f40ba45b5d46e61c042"
     }
-  }
 }
