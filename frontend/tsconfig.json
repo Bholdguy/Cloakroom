@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@starknet-privacy-sdk/*": [
+        "./lib/starknet-privacy-sdk/*"
       ]
     }
   },

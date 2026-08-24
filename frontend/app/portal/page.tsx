@@ -7,7 +7,7 @@ import { RpcProvider, Account, constants } from 'starknet';
 import {
   createPrivateTransfers,
   createEmptyRegistry,
-} from '../../vendor/starknet-privacy-sdk/dist';
+} from '@starknet-privacy-sdk/dist';
 
 const POOL_ADDRESS = '0x0254a6b2997ef52e9f830ce1f543f6b29768295e8d17e2267d672c552cfe0d91';
 const PAYROLL_ANONYMIZER_ADDRESS = '0x7d075ac3cc2c6a379d53641571cfc760870b732e8e3fece6f9f7bf7196dc6ac';
