@@ -1,0 +1,1 @@
+{"version":1,"contracts":[{"id":"b2c166m1sfd4s","package_name":"cloakroom","contract_name":"PayrollAnonymizer","module_path":"cloakroom::payroll_anonymizer::PayrollAnonymizer","artifacts":{"sierra":"cloakroom_PayrollAnonymizer.contract_class.json","casm":"cloakroom_PayrollAnonymizer.compiled_contract_class.json"}}]}

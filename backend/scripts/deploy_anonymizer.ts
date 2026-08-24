@@ -5,7 +5,7 @@ import path from "path";
 async function main() {
   const privateKey = "0x3a633b9fb1e50e4970b69e35421153b3300c006227f7bd3e70d854ab448415f";
   const accountAddress = "0x0026e8f22ab88c2020f7e14ba20fbdd26ef23017ff0e7c94c93d186e8716a9db";
-  const providerUrl = "https://free-rpc.nethermind.io/sepolia-juno/";
+  const providerUrl = "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/56yo9CNoEeVwYGxwwr1fbB4VjgGteczc";
   const provider = new RpcProvider({ nodeUrl: providerUrl });
   const account = new Account({
     nodeUrl: providerUrl,
@@ -14,9 +14,9 @@ async function main() {
     cairoVersion: "1"
   });
 
-  const classHash = "0xe5e98c32fb0c0c1de14d16dc60af559d218aab48e07598d385a37b10995065";
+  const classHash = "0x25e900f1da71a61677e2f4d18610edb120e1a3bde7743fbf1927aeba420103f";
   console.log("Class is declared. Deploying contract...");
-  const poolAddress = "0x0254a6b2997ef52e9f830ce1f543f6b29768295e8d17e2267d672c552cfe0d91";
+  const poolAddress = "0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a";
   const constructorArgs = CallData.compile({
     pool_address: poolAddress,
     owner: accountAddress

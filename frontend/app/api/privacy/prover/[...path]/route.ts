@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 60;
 
-const TARGET_HOST = "https://sepolia.prover.privacy.starknet.io";
+const TARGET_HOST = "https://mainnet.prover.privacy.starknet.io";
 
 export async function POST(
   request: NextRequest,

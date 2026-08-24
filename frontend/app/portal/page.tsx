@@ -9,8 +9,8 @@ import {
   createEmptyRegistry,
 } from '@starknet-privacy-sdk/dist';
 
-const POOL_ADDRESS = '0x0254a6b2997ef52e9f830ce1f543f6b29768295e8d17e2267d672c552cfe0d91';
-const PAYROLL_ANONYMIZER_ADDRESS = '0x7d075ac3cc2c6a379d53641571cfc760870b732e8e3fece6f9f7bf7196dc6ac';
+const POOL_ADDRESS = '0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a';
+const PAYROLL_ANONYMIZER_ADDRESS = '0x7fe35f8d7e4dc69841492a8a4aefd5161443b514ddb61bccdd32a45ac86c248';
 const STRK_TOKEN = '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d';
 const SESSION_KEY_ID = '0x636c6f616b726f6f6d2d64656d6f2d31';
 const LOCK_AMOUNT = BigInt("1000000000000000000");
@@ -82,7 +82,7 @@ export default function PortalPage() {
         viewingKeyProvider,
         provingProvider: {
           url: PROVER_URL,
-          chainId: constants.StarknetChainId.SN_SEPOLIA,
+          chainId: constants.StarknetChainId.SN_MAIN,
           nodeUrl: SEPOLIA_RPC_URL,
         },
         discoveryProvider: { url: DISCOVERY_URL },

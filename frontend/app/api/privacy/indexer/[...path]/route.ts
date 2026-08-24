@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const TARGET_HOST = "https://sepolia.indexer.privacy.starknet.io";
+const TARGET_HOST = "https://mainnet.indexer.privacy.starknet.io";
 
 export async function POST(
   request: NextRequest,
