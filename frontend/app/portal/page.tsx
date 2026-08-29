@@ -68,13 +68,27 @@ export default function PortalPage() {
 
       const viewingKeyProvider = {
         getViewingKey: async (): Promise<bigint> => {
+          const chainId =
+            starknetObj.account?.chainId ||
+            starknetObj.chainId ||
+            (await provider.getChainId().catch(() => constants.StarknetChainId.SN_MAIN)) ||
+            constants.StarknetChainId.SN_MAIN;
+
           const sig = await starknetObj.account.signMessage({
             types: {
-              StarkNetDomain: [{ name: 'name', type: 'felt' }],
+              StarkNetDomain: [
+                { name: 'name', type: 'felt' },
+                { name: 'version', type: 'felt' },
+                { name: 'chainId', type: 'felt' },
+              ],
               Message: [{ name: 'key', type: 'felt' }],
             },
             primaryType: 'Message',
-            domain: { name: 'CloakroomViewingKey' },
+            domain: {
+              name: 'CloakroomViewingKey',
+              version: '1',
+              chainId,
+            },
             message: { key: 'viewing-key-v1' },
           });
           const raw = Array.isArray(sig) ? sig[0] : (sig.r ?? sig[0]);
