@@ -35,6 +35,17 @@ Cloakroom is built on a modern, high-performance zero-knowledge stack:
 2. **Association Sets & "Proof of Innocence"**: Organizations can prove compliance without breaking privacy by generating proofs that their funds do not originate from sanctioned or malicious association sets.
 3. **Scoped Compliance Viewing Keys**: Treasuries can issue read-only viewing keys to auditors and regulators, providing transparent access to specific transaction histories without compromising global privacy.
 4. **Encrypted On-Chain Vesting**: Employee token vesting schedules are handled on-chain but encrypted, preventing competitors from scraping employee compensation data.
+## 🔐 Privacy Model & Evidence Matrix
+
+Cloakroom is built on strict data confidentiality boundaries. By separating public interaction from encrypted state and utilizing zero-knowledge proofs, we ensure that sensitive organizational data remains entirely private while still conforming to global verifiable accounting rules.
+
+| Data Type | Visibility Tier |
+|-----------|-----------------|
+| **Pool Interaction & Timing** | Public (On-Chain) |
+| **Commitment Roots & Nullifiers** | Public (Zero-Knowledge) |
+| **Worker Identity & Payout Address** | Encrypted Ciphertext (Stealth) |
+| **Salary & Compensation Amount** | Encrypted Ciphertext (MASP Notes) |
+| **Audit Receipts & Viewing Keys** | Holder/Auditor Choice Only |
 
 ## 📂 Repository Structure
 
