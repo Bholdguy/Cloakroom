@@ -25,9 +25,40 @@ type TxStatus = 'idle' | 'proving' | 'submitting' | 'confirmed' | 'error';
 export default function PortalPage() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [starknetObj, setStarknetObj] = useState<any>(null);
+  const [balance, setBalance] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [status, setStatus] = useState<TxStatus>('idle');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const fetchBalance = async (addr: string) => {
+    try {
+      const provider = new RpcProvider({ nodeUrl: RPC_URL });
+      const res = await provider.callContract({
+        contractAddress: STRK_TOKEN,
+        entrypoint: 'balanceOf',
+        calldata: [addr],
+      });
+      if (res && res.length >= 2) {
+        const low = BigInt(res[0]);
+        const high = BigInt(res[1]);
+        const total = (high << 128n) + low;
+        const formatted = (Number(total) / 1e18).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 4,
+        });
+        setBalance(formatted);
+      } else if (res && res.length === 1) {
+        const total = BigInt(res[0]);
+        const formatted = (Number(total) / 1e18).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 4,
+        });
+        setBalance(formatted);
+      }
+    } catch (err) {
+      console.error('Failed to fetch STRK balance:', err);
+    }
+  };
 
   const handleConnect = async () => {
     try {
@@ -35,13 +66,18 @@ export default function PortalPage() {
       if (!sn) { alert('Please install Argent X or Braavos.'); return; }
       await sn.enable();
       const address = sn.selectedAddress || sn.account?.address;
-      if (address) { setWalletAddress(address); setStarknetObj(sn); }
+      if (address) {
+        setWalletAddress(address);
+        setStarknetObj(sn);
+        fetchBalance(address);
+      }
     } catch (err) { console.error('Wallet connect failed:', err); }
   };
 
   const handleDisconnect = async () => {
     await disconnect();
     setWalletAddress(null); setStarknetObj(null);
+    setBalance(null);
     setTxHash(null); setStatus('idle'); setErrorMsg(null);
   };
 
@@ -200,9 +236,17 @@ export default function PortalPage() {
 
       {walletAddress ? (
         <div className="flex flex-col items-center gap-6 w-full max-w-md">
-          <div className="bg-[#86EFAC] text-[#14532D] font-bold py-4 px-8 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest flex items-center gap-3">
-            <span className="w-3 h-3 rounded-full bg-green-500 border border-black animate-pulse" />
-            {truncate(walletAddress)}
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full justify-center">
+            <div className="bg-[#86EFAC] text-[#14532D] font-bold py-3 px-6 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xs uppercase tracking-widest flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500 border border-black animate-pulse" />
+              {truncate(walletAddress)}
+            </div>
+            {balance !== null && (
+              <div className="bg-white text-black font-mono font-bold py-3 px-6 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xs tracking-wider flex items-center gap-1.5">
+                <span className="text-gray-500 font-sans uppercase font-bold text-[10px]">STRK:</span>
+                <span className="text-[#7B5FF0] font-black">{balance}</span>
+              </div>
+            )}
           </div>
 
           <button
