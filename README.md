@@ -6,6 +6,8 @@
 
 **Cloakroom** provides institutional-grade privacy for on-chain payroll and treasury operations on Starknet. 
 
+**Live Portal (Vercel):** [https://cloakroom-xi.vercel.app/portal](https://cloakroom-xi.vercel.app/portal)
+
 Public block explorers inherently expose sensitive organizational data—salaries, bonuses, and vendor payments are visible to everyone. Cloakroom solves this by utilizing zero-knowledge cryptography (ZK-STARKs) to completely mask transaction amounts, sender-receiver linkages, and asset flows while maintaining verifiable accounting. Organizations can now run their on-chain payroll with the confidentiality they expect from traditional banking.
 
 ## 🚀 Verified Starknet Mainnet Deployment
@@ -63,6 +65,7 @@ The monorepo is divided into distinct, purpose-built workspaces:
 
 ### Frontend (Next.js)
 The frontend is built with a striking neo-brutalist aesthetic using Next.js and Tailwind CSS.
+You can view the live deployment here: [https://cloakroom-xi.vercel.app/portal](https://cloakroom-xi.vercel.app/portal)
 
 ```bash
 cd frontend
