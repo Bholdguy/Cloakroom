@@ -55,6 +55,7 @@ async function handleProxy(
         fallback: true,
         notes: [],
         channels: [],
+        subchannels: [],
         events: []
       }, { status: 200 });
     }
@@ -77,6 +78,7 @@ async function handleProxy(
       fallback: true,
       notes: [],
       channels: [],
+      subchannels: [],
       events: []
     }, { status: 200 });
   }
