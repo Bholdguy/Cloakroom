@@ -6,17 +6,17 @@ const FAQS = [
   {
     id: "faq-privacy-pool",
     q: "What is the STRK20 Privacy Pool?",
-    a: "The STRK20 Privacy Pool is a smart contract that accepts multiple asset types into a single anonymity set. When you deposit STRK or any STRK20 token, your transaction is blended with others.",
+    a: "The STRK20 Privacy Pool is a smart contract that manages confidential balances through per-token subchannels. When you deposit or transfer STRK, notes and nullifiers are committed into the pool's cryptographic state trees.",
   },
   {
-    id: "faq-stealth",
-    q: "How do stealth addresses work for payroll?",
-    a: "Instead of sending to an employee's known wallet address, Cloakroom generates a unique one-time stealth address per payment using ECDH key derivation and Poseidon hashing. The recipient scans the chain and can detect payments meant for them without ever exposing a reusable address to the employer or public.",
+    id: "faq-viewing-keys",
+    q: "How do encrypted notes and viewing keys work for payroll?",
+    a: "Instead of public wallet transfers, Cloakroom generates encrypted notes committed into the privacy pool. Recipients discover and decrypt payments using their private viewing keys without exposing compensation amounts or linkable addresses to the public.",
   },
   {
     id: "faq-compliance",
     q: "How does Cloakroom achieve compliance without breaking privacy?",
-    a: "We use Scoped Viewing Keys that allow you to grant time-limited, counterparty-limited decryption to auditors without revealing anything beyond what you authorise. This allows for standard cryptographic proofs during audits.",
+    a: "We use Scoped Viewing Keys that allow you to grant time-limited, counterparty-limited decryption to auditors without revealing anything beyond what you authorise. In addition, deposit-screening sidecars verify fund origins before shielding.",
   },
   {
     id: "faq-gas",
@@ -26,7 +26,7 @@ const FAQS = [
   {
     id: "faq-starknet",
     q: "Why build on Starknet specifically?",
-    a: "Starknet provides native ZK-STARK proof verification at the execution layer, making on-chain proof verification cheap and fast. The Stwo prover achieves fast proof times in-browser — essential for a responsive payroll UI.",
+    a: "Starknet provides native ZK-STARK proof verification at the execution layer, making on-chain proof verification cheap and fast. Dedicated proving services generate validity proofs efficiently for a responsive payroll workflow.",
   },
 ];
 

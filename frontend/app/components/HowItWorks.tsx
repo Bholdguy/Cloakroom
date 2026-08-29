@@ -41,8 +41,8 @@ const ROLES = [
     steps: [
       {
         n: "01",
-        title: "Receive One-Time Claim Ticket",
-        body: "The employer generates a stealth address and encrypted note for each recipient. Delivered off-chain (email, Signal, or Cloakroom inbox). No wallet address is ever reused.",
+        title: "Discover Encrypted Note",
+        body: "The employer creates an encrypted note committed to the privacy pool. The contributor discovers and decrypts their note using their viewing key.",
         code: "ticket = { note_hash: '0x7f3e…', proof_path: [...], key: 'enc' }",
       },
       {

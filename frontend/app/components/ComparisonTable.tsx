@@ -3,7 +3,7 @@ const FEATURES = [
   "Vesting Protection",
   "Cryptographic Verification",
   "Gasless Onboarding",
-  "Stealth Addresses",
+  "Encrypted Note Keys",
   "Audit Compliance",
   "Self-Custodial Security",
   "Zero Gas Fees",

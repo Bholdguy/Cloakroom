@@ -17,7 +17,7 @@ const PILLARS = [
     tags: ["ZK-STARKs", "Poseidon Hash", "Merkle Tree"],
   },
   {
-    id: "stealth",
+    id: "encrypted-notes",
     bg: "#FDBA74",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -26,11 +26,11 @@ const PILLARS = [
     ),
     tagline: "ZERO COORDINATION",
     badge: "PRIVATE TRANSFERS",
-    title: "Stealth Payouts",
-    subtitle: "Non-Interactive Transfers",
-    body: "Recipients never expose a reusable address. A one-time stealth address is generated per payment using the recipient's ephemeral key, derived on-device.",
+    title: "Encrypted Note Transfers",
+    subtitle: "Confidential Note Registry",
+    body: "Payments are delivered as encrypted notes committed into the privacy pool. Recipients discover and decrypt funds using their private viewing keys.",
     detail: "Derivation: ECDH + Poseidon",
-    tags: ["ECDH", "One-Time Addresses"],
+    tags: ["ECDH", "Viewing Keys", "Encrypted Notes"],
   },
   {
     id: "compliance",

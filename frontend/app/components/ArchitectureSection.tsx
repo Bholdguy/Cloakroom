@@ -20,7 +20,7 @@ const ARCH_STEPS = [
     tag: "SDK",
     emoji: "📦",
     title: "STRK20 Privacy SDK + Starknet.js Middleware",
-    body: "TypeScript and Next.js abstractions handle note creation, Merkle tree management, and stealth address derivation. All crypto runs in-browser.",
+    body: "TypeScript and Next.js abstractions handle note creation, Merkle tree management, and encrypted note key derivation. Secret signing keys remain strictly client-side.",
     spec: "Frontend: TypeScript / Next.js",
   },
   {
@@ -45,7 +45,7 @@ const SECURITY_PROPS = [
   { label: "Proof System", value: "ZK-STARKs (Stwo Engine)" },
   { label: "Hash Function", value: "Poseidon" },
   { label: "Commitment", value: "Merkle Tree" },
-  { label: "Stealth Scheme", value: "ECDH + Poseidon" },
+  { label: "Key Scheme", value: "ECDH + Poseidon" },
   { label: "Formal Testing", value: "Pending" },
   { label: "Trusted Setup", value: "None" },
   { label: "Max Batch Size", value: "30 transactions" },

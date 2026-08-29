@@ -1,16 +1,5 @@
-{
-  "call": {
-    "contractAddress": "0x40337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a",
-    "entrypoint": "apply_actions",
-    "calldata": [
-      "0x0",
-      "0x1"
-    ]
-  },
-  "extra": {
-    "tip": "0",
-    "proofFacts": [
-      "0xPROOF0"
-    ]
-  }
-}
+[
+  "0x0799c64eb376609d27d2fe2e837b0f0479a5a6fdcc09b821b6964171ca0d5042",
+  "0x02a4f1731f701495d5c4456cc9a9bb6bcfecbe89dd201c3e0b7166aab9411d62",
+  "0x029c21788c1a6d820c558363872154480f0bdc2272886edc5b5eff05cd9d5e64"
+]

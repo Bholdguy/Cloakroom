@@ -25,18 +25,18 @@ Cloakroom is live on Starknet Mainnet. Our core anonymizer logic is deployed and
 
 Cloakroom is built on a modern, high-performance zero-knowledge stack:
 
-- **Cairo 2.x Smart Contracts**: Highly optimized on-chain logic audited and tested using Starknet Foundry (`snforge`).
-- **Client-Side Stwo ZK-STARK Prover**: Browser and local execution environments generate cryptographic proofs off-chain, ensuring user secrets are strictly isolated and never transmitted.
+- **Cairo 2.x Smart Contracts**: Highly optimized on-chain logic developed and tested using Starknet Foundry (`snforge`).
+- **Remote ZK-STARK Prover Service**: Proving operations are processed via dedicated prover endpoints, while secret viewing keys and account signers remain strictly isolated on the client.
 - **STRK20 Privacy SDK Integration**: Deep integration with Starknet.js and native Account Abstraction allows for gasless, seamless user experiences via Paymasters.
-- **STRK20 Privacy Pool**: A unified shielded pool enabling the private transfer and vesting of STRK and other Starknet tokens.
-- **Non-Interactive Stealth Addresses**: Receivers generate stealth meta-addresses, allowing dispatchers to send funds without the receiver needing to interact to generate new addresses.
+- **STRK20 Privacy Pool & Per-Token Subchannels**: Operates on the canonical STRK20 privacy pool using structured per-token subchannels for isolated note nonces and balances.
+- **Encrypted Notes & Viewing Keys**: Payments are structured as encrypted notes registered under recipient public keys and discoverable via scoped viewing keys without exposing reusable public payout trails.
 
 ## 💎 Key Value Pillars
 
-1. **Universal Anonymity Sets**: By utilizing a shared shielded pool for multiple assets, Cloakroom maximizes the anonymity set, making traffic analysis computationally infeasible.
-2. **Association Sets & "Proof of Innocence"**: Organizations can prove compliance without breaking privacy by generating proofs that their funds do not originate from sanctioned or malicious association sets.
+1. **Per-Token Subchannels & Privacy Pool**: Transactions operate across per-token subchannels within the canonical STRK20 privacy pool, blending transfers into shared commitment and nullifier trees.
+2. **Deposit-Screening Sidecar**: Organizations maintain regulatory compliance through automated deposit-screening sidecars that verify source-of-funds criteria before assets enter the privacy pool.
 3. **Scoped Compliance Viewing Keys**: Treasuries can issue read-only viewing keys to auditors and regulators, providing transparent access to specific transaction histories without compromising global privacy.
-4. **Encrypted On-Chain Vesting**: Employee token vesting schedules are handled on-chain but encrypted, preventing competitors from scraping employee compensation data.
+4. **Encrypted On-Chain Vesting**: Employee token vesting schedules are handled on-chain via the `PayrollAnonymizer` contract while compensation amounts and note commitments remain strictly confidential.
 ## 🔐 Privacy Model & Evidence Matrix
 
 Cloakroom is built on strict data confidentiality boundaries. By separating public interaction from encrypted state and utilizing zero-knowledge proofs, we ensure that sensitive organizational data remains entirely private while still conforming to global verifiable accounting rules.
@@ -45,7 +45,7 @@ Cloakroom is built on strict data confidentiality boundaries. By separating publ
 |-----------|-----------------|
 | **Pool Interaction & Timing** | Public (On-Chain) |
 | **Commitment Roots & Nullifiers** | Public (Zero-Knowledge) |
-| **Worker Identity & Payout Address** | Encrypted Ciphertext (Stealth) |
+| **Worker Identity & Payout Address** | Encrypted Ciphertext (Recipient Note Keys) |
 | **Salary & Compensation Amount** | Encrypted Ciphertext (Shielded Notes) |
 | **Audit Receipts & Viewing Keys** | Holder/Auditor Choice Only |
 
