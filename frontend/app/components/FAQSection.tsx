@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const FAQS = [
   {
-    id: "faq-masp",
+    id: "faq-privacy-pool",
     q: "What is the STRK20 Privacy Pool?",
     a: "The STRK20 Privacy Pool is a smart contract that accepts multiple asset types into a single anonymity set. When you deposit STRK or any STRK20 token, your transaction is blended with others.",
   },

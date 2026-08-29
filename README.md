@@ -28,7 +28,7 @@ Cloakroom is built on a modern, high-performance zero-knowledge stack:
 - **Cairo 2.x Smart Contracts**: Highly optimized on-chain logic audited and tested using Starknet Foundry (`snforge`).
 - **Client-Side Stwo ZK-STARK Prover**: Browser and local execution environments generate cryptographic proofs off-chain, ensuring user secrets are strictly isolated and never transmitted.
 - **STRK20 Privacy SDK Integration**: Deep integration with Starknet.js and native Account Abstraction allows for gasless, seamless user experiences via Paymasters.
-- **MASP (Multi-Asset Shielded Pool)**: A generic shielded pool enabling the private transfer of multiple token standards.
+- **STRK20 Privacy Pool**: A unified shielded pool enabling the private transfer and vesting of STRK and other Starknet tokens.
 - **Non-Interactive Stealth Addresses**: Receivers generate stealth meta-addresses, allowing dispatchers to send funds without the receiver needing to interact to generate new addresses.
 
 ## 💎 Key Value Pillars
@@ -46,7 +46,7 @@ Cloakroom is built on strict data confidentiality boundaries. By separating publ
 | **Pool Interaction & Timing** | Public (On-Chain) |
 | **Commitment Roots & Nullifiers** | Public (Zero-Knowledge) |
 | **Worker Identity & Payout Address** | Encrypted Ciphertext (Stealth) |
-| **Salary & Compensation Amount** | Encrypted Ciphertext (MASP Notes) |
+| **Salary & Compensation Amount** | Encrypted Ciphertext (Shielded Notes) |
 | **Audit Receipts & Viewing Keys** | Holder/Auditor Choice Only |
 
 ## 📂 Repository Structure
