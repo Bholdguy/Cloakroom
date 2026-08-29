@@ -47,6 +47,11 @@ export default function PortalPage() {
 
   const executePayroll = async () => {
     if (!starknetObj?.account) return;
+    if (!PAYROLL_ANONYMIZER_ADDRESS.startsWith('0x')) {
+      setErrorMsg('Payroll anonymizer contract not yet deployed on this network.');
+      setStatus('error');
+      return;
+    }
     setStatus('proving'); setErrorMsg(null); setTxHash(null);
 
     try {
