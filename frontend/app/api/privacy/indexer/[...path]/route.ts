@@ -49,6 +49,16 @@ async function handleProxy(
       body,
     });
 
+    if (!response.ok) {
+      console.warn(`[Indexer Proxy] target returned ${response.status} for ${pathStr}. Returning fallback state.`);
+      return NextResponse.json({
+        fallback: true,
+        notes: [],
+        channels: [],
+        events: []
+      }, { status: 200 });
+    }
+
     const data = await response.arrayBuffer();
     
     const responseHeaders = new Headers();
@@ -62,9 +72,12 @@ async function handleProxy(
       headers: responseHeaders,
     });
   } catch (error: any) {
-    return NextResponse.json(
-      { error: "Proxy request failed", details: error.message },
-      { status: 500 }
-    );
+    console.warn(`[Indexer Proxy] fetch failed for ${pathStr}. Returning fallback state. Error: ${error.message}`);
+    return NextResponse.json({
+      fallback: true,
+      notes: [],
+      channels: [],
+      events: []
+    }, { status: 200 });
   }
 }
