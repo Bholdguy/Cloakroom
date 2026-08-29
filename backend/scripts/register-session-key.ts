@@ -15,7 +15,7 @@ async function main() {
     throw new Error("Missing private key or account address in .env");
   }
 
-  const rpcUrl = process.env.SEPOLIA_RPC_URL || "https://free-rpc.nethermind.io/sepolia-juno/";
+  const rpcUrl = process.env.CLOAKROOM_RPC_URL || "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/alch_pIF1eQLl4crvr0DfGYFVx";
   
   console.log(`Connecting to provider: ${rpcUrl}`);
   const provider = new RpcProvider({ nodeUrl: rpcUrl });

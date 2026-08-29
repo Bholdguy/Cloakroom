@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { Contract } from "starknet";
-import { loadConfig } from "./config.js";
+import { loadConfig, requireAnonymizer } from "./config.js";
 import { registerEmployer } from "./payroll.js";
 import { lockPayrollJobs } from "./builder.js";
 import { loadPayrollJobsForLock } from "./payroll_engine.js";
@@ -100,7 +100,7 @@ async function main() {
   );
   const anonymizerContract = new Contract({
     abi: anonymizerClass.abi,
-    address: toHex(cfg.anonymizerAddress),
+    address: toHex(requireAnonymizer(cfg)),
     providerOrAccount: client.provider as any,
   });
   const vestingId = jobs[0].entries[0].vestingId;

@@ -15,7 +15,7 @@ async function main() {
     throw new Error("Missing DEPLOYER_PRIVATE_KEY or DEPLOYER_ACCOUNT_ADDRESS in .env");
   }
 
-  const rpcUrl = process.env.SEPOLIA_RPC_URL || "https://starknet-sepolia.drpc.org";
+  const rpcUrl = process.env.CLOAKROOM_RPC_URL || "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/alch_pIF1eQLl4crvr0DfGYFVx";
   const provider = new RpcProvider({ nodeUrl: rpcUrl });
   
   const OZ_ACCOUNT_CLASS_HASH = "0x05400e90f7e0ae78b0284c478a3c8751ce329184518ed2e6d62f928e4ec4e3b7";

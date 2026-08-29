@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const TARGET_HOST = "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/56yo9CNoEeVwYGxwwr1fbB4VjgGteczc";
+const TARGET_HOST = "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/alch_pIF1eQLl4crvr0DfGYFVx";
 
 export async function POST(request: NextRequest) {
   return handleProxy(request);

@@ -5,10 +5,10 @@ import path from "path";
 async function main() {
   const privateKey = "0x3a633b9fb1e50e4970b69e35421153b3300c006227f7bd3e70d854ab448415f";
   const accountAddress = "0x0026e8f22ab88c2020f7e14ba20fbdd26ef23017ff0e7c94c93d186e8716a9db";
-  const providerUrl = "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/56yo9CNoEeVwYGxwwr1fbB4VjgGteczc";
+  const providerUrl = "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/alch_pIF1eQLl4crvr0DfGYFVx";
   const provider = new RpcProvider({ nodeUrl: providerUrl });
   const account = new Account({
-    nodeUrl: providerUrl,
+    provider,
     address: accountAddress,
     signer: privateKey,
     cairoVersion: "1"

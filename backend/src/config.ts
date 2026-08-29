@@ -92,8 +92,8 @@ export function loadConfig(): CloakroomConfig {
     accountAddress: parseAddress(required("CLOAKROOM_ACCOUNT_ADDRESS"), "account"),
     privateKey: required("CLOAKROOM_PRIVATE_KEY"),
     viewingKey: parseFelt(required("CLOAKROOM_VIEWING_KEY"), "viewing key"),
-    provingServiceUrl: optional("CLOAKROOM_PROVING_SERVICE_URL") ?? "https://sepolia.prover.privacy.starknet.io",
-    discoveryUrl: optional("CLOAKROOM_DISCOVERY_URL") ?? "https://sepolia.indexer.privacy.starknet.io",
+    provingServiceUrl: optional("CLOAKROOM_PROVING_SERVICE_URL") ?? "https://mainnet.prover.privacy.starknet.io",
+    discoveryUrl: optional("CLOAKROOM_DISCOVERY_URL") ?? "https://mainnet.indexer.privacy.starknet.io",
     anonymizerAddress: anonymizer
       ? parseAddress(anonymizer, "anonymizer")
       : parseAddress("0x0111111111111111111111111111111111111111111111111111111111111111", "mock anonymizer"),
@@ -104,10 +104,18 @@ export function loadConfig(): CloakroomConfig {
   };
 }
 
+const MOCK_ANONYMIZER_ADDRESS = 0x0111111111111111111111111111111111111111111111111111111111111111n;
+
 export function requireAnonymizer(cfg: CloakroomConfig): bigint {
   if (!cfg.anonymizerAddress) {
     throw new Error(
       "CLOAKROOM_ANONYMIZER_ADDRESS is required for vesting (lock/claim/register-session)",
+    );
+  }
+  if (cfg.anonymizerAddress === MOCK_ANONYMIZER_ADDRESS) {
+    throw new Error(
+      "CLOAKROOM_ANONYMIZER_ADDRESS is not set: the resolved address is the mock placeholder " +
+      "(0x0111...1111). Set a real deployed contract address in backend/.env before proceeding."
     );
   }
   return cfg.anonymizerAddress;

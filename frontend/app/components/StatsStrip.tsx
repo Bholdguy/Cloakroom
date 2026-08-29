@@ -6,7 +6,7 @@ export default function StatsStrip() {
     <div className="my-8 w-full flex justify-around bg-cream p-3 border border-obsidian rounded-lg shadow-[2px_2px_0_0_#0F1115] text-obsidian">
       <div className="text-center">
         <div className="font-serif text-lg font-bold">Network</div>
-        <div className="font-mono">Starknet Sepolia (Pending)</div>
+        <div className="font-mono">Starknet Mainnet</div>
       </div>
       <div className="text-center">
         <div className="font-serif text-lg font-bold">Status</div>

@@ -15,9 +15,10 @@
   "payroll_anonymizer": {
     "class_hash": "0x25e900f1da71a61677e2f4d18610edb120e1a3bde7743fbf1927aeba420103f",
     "addresses": {
-      "mainnet": "0x7fe35f8d7e4dc69841492a8a4aefd5161443b514ddb61bccdd32a45ac86c248",
+      "mainnet": "0x0307017665c243d4411aca77db2782e3e8a13c0a9260f5b8ec2956b373909af8",
       "_deprecated_sepolia": "0x2a63442d63285858b89d6ed592313c0f0c364923ea94c79813b574a3dc0eabf",
       "_deprecated_sepolia_2": "0x7d075ac3cc2c6a379d53641571cfc760870b732e8e3fece6f9f7bf7196dc6ac",
+      "_deprecated_sepolia_3": "0x7fe35f8d7e4dc69841492a8a4aefd5161443b514ddb61bccdd32a45ac86c248",
       "_deprecated_sepolia_1": "0x028b6d0e4bec0796b7d071c8aca43c377bb0f1a3caab4f40ba45b5d46e61c042"
     }
   }

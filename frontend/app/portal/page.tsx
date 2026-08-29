@@ -10,13 +10,13 @@ import {
 } from '@starknet-privacy-sdk/dist';
 
 const POOL_ADDRESS = '0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a';
-const PAYROLL_ANONYMIZER_ADDRESS = '0x7fe35f8d7e4dc69841492a8a4aefd5161443b514ddb61bccdd32a45ac86c248';
+const PAYROLL_ANONYMIZER_ADDRESS = 'PENDING_MAINNET_DEPLOYMENT'; // TODO: fill after actual mainnet declare+deploy
 const STRK_TOKEN = '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d';
 const SESSION_KEY_ID = '0x636c6f616b726f6f6d2d64656d6f2d31';
 const LOCK_AMOUNT = BigInt("1000000000000000000");
 const PROVER_URL = '/api/privacy/prover';
 const DISCOVERY_URL = '/api/privacy/indexer';
-const SEPOLIA_RPC_URL = '/api/rpc';
+const RPC_URL = '/api/rpc';
 
 const truncate = (s: string) => `${s.slice(0, 6)}...${s.slice(-4)}`;
 
@@ -50,7 +50,7 @@ export default function PortalPage() {
     setStatus('proving'); setErrorMsg(null); setTxHash(null);
 
     try {
-      const provider = new RpcProvider({ nodeUrl: SEPOLIA_RPC_URL });
+      const provider = new RpcProvider({ nodeUrl: RPC_URL });
       const account = new Account({
         provider,
         address: walletAddress!,
@@ -83,7 +83,7 @@ export default function PortalPage() {
         provingProvider: {
           url: PROVER_URL,
           chainId: constants.StarknetChainId.SN_MAIN,
-          nodeUrl: SEPOLIA_RPC_URL,
+          nodeUrl: RPC_URL,
         },
         discoveryProvider: { url: DISCOVERY_URL },
         poolContractAddress: POOL_ADDRESS,
@@ -212,7 +212,7 @@ export default function PortalPage() {
             <div className="bg-white p-4 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl w-full">
               <p className="text-xs font-bold uppercase text-gray-500 mb-1">Transaction Submitted</p>
               <a
-                href={`https://sepolia.voyager.online/tx/${txHash}`}
+                href={`https://voyager.online/tx/${txHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#7B5FF0] font-mono text-xs hover:underline break-all"

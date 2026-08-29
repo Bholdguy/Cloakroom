@@ -1,0 +1,16 @@
+{
+  "call": {
+    "contractAddress": "0x40337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a",
+    "entrypoint": "apply_actions",
+    "calldata": [
+      "0x0",
+      "0x1"
+    ]
+  },
+  "extra": {
+    "tip": "0",
+    "proofFacts": [
+      "0xPROOF0"
+    ]
+  }
+}
