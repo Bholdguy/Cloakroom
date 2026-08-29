@@ -107,8 +107,17 @@ async function handleProxy(
     });
 
     if (!response.ok) {
-      console.warn(`[Indexer Proxy] target returned ${response.status} for ${pathStr}. Returning fallback state.`);
-      return NextResponse.json(getFallbackResponse(pathStr), { status: 200 });
+      const errText = await response.text();
+      return NextResponse.json(
+        {
+          error: "UPSTREAM_INDEXER_ERROR",
+          status: response.status,
+          path: pathStr,
+          targetUrl,
+          message: errText || response.statusText,
+        },
+        { status: 502 }
+      );
     }
 
     const data = await response.arrayBuffer();
@@ -124,7 +133,15 @@ async function handleProxy(
       headers: responseHeaders,
     });
   } catch (error: any) {
-    console.warn(`[Indexer Proxy] fetch failed for ${pathStr}. Returning fallback state. Error: ${error.message}`);
-    return NextResponse.json(getFallbackResponse(pathStr), { status: 200 });
+    return NextResponse.json(
+      {
+        error: "INDEXER_UPSTREAM_UNREACHABLE",
+        path: pathStr,
+        targetUrl,
+        cause: error.message,
+        code: error.code || "ENOTFOUND",
+      },
+      { status: 502 }
+    );
   }
 }
