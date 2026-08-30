@@ -1,0 +1,24 @@
+name: Test AVX-512 and Prebuilt Prover
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  check-avx512:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check CPU Flags for AVX-512
+        run: |
+          echo "=== CPU Model ==="
+          grep -m1 "model name" /proc/cpuinfo || true
+          echo "=== AVX512 Check ==="
+          grep -m1 "avx512f" /proc/cpuinfo || echo "NO_AVX512F_FOUND"
+
+      - name: Test Prebuilt Prover Container --help
+        run: |
+          echo "=== Pulling Prebuilt Prover ==="
+          docker pull ghcr.io/starkware-libs/starknet-privacy/transaction-prover:PRIVACY-0.14.3-RC.0
+          echo "=== Running --help ==="
+          docker run --rm ghcr.io/starkware-libs/starknet-privacy/transaction-prover:PRIVACY-0.14.3-RC.0 --help
