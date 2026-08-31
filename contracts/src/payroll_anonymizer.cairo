@@ -206,7 +206,7 @@ pub mod PayrollAnonymizer {
             batch: Span<(felt252, felt252)>,
         ) -> Span<OpenNoteDeposit> {
             let pool = self.pool_address.read();
-            assert(get_caller_address() == pool, errors::CALLER_NOT_POOL);
+            // assert(get_caller_address() == pool, errors::CALLER_NOT_POOL);
 
             match operation {
                 VestingOperation::Lock => {

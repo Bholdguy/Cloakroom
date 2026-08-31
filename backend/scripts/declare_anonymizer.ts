@@ -32,6 +32,18 @@ async function main() {
   const compiledCasm = json.parse(fs.readFileSync(path.resolve(process.cwd(), "../contracts/target/release/cloakroom_PayrollAnonymizer.compiled_contract_class.json")).toString("ascii"));
 
   console.log("Declaring contract...");
+
+  account.estimateDeclareFee = async () => {
+    return {
+      suggestedMaxFee: BigInt(0),
+      resourceBounds: {
+        l2_gas: { max_amount: BigInt(350000000), max_price_per_unit: BigInt(55000000000) },
+        l1_gas: { max_amount: BigInt(1000), max_price_per_unit: BigInt(200000000000000) },
+        l1_data_gas: { max_amount: BigInt(1000), max_price_per_unit: BigInt(300000000000) }
+      }
+    };
+  };
+
   const declareResponse = await account.declare({
     contract: compiledContract,
     casm: compiledCasm,

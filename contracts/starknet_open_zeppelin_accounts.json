@@ -1,0 +1,13 @@
+{
+  "alpha-mainnet": {
+    "cloakroom": {
+      "address": "0x013FE2c0Fc8e103a0c5B2c0fF716117aB03e8Df74E576c8B265731d41e4091dD",
+      "private_key": "0x03ef9526c4dea421be92c7ca453d2b6f51eb4275b53cfaea1b7de25c473151ec",
+      "public_key": "0x0",
+      "variant": {
+        "type": "open_zeppelin",
+        "version": 1
+      }
+    }
+  }
+}

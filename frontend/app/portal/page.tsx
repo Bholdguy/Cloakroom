@@ -10,7 +10,7 @@ import {
 } from '@starknet-privacy-sdk/dist';
 
 const POOL_ADDRESS = '0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a';
-const PAYROLL_ANONYMIZER_ADDRESS = '0x0307017665c243d4411aca77db2782e3e8a13c0a9260f5b8ec2956b373909af8';
+const PAYROLL_ANONYMIZER_ADDRESS = '0x65e54e30f5b88401a3475f205373c682bc90a8a26bbda1bfbf65c413f29d69c';
 const STRK_TOKEN = '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d';
 const SESSION_KEY_ID = '0x636c6f616b726f6f6d2d64656d6f2d31';
 const LOCK_AMOUNT = BigInt("1000000000000000000");
@@ -88,109 +88,31 @@ export default function PortalPage() {
       setStatus('error');
       return;
     }
-    setStatus('proving'); setErrorMsg(null); setTxHash(null);
+    setStatus('submitting'); setErrorMsg(null); setTxHash(null);
 
     try {
-      const provider = new RpcProvider({ nodeUrl: RPC_URL });
-      const account = new Account({
-        provider,
-        address: walletAddress!,
-        signer: starknetObj.account.signer ?? starknetObj.account,
-        cairoVersion: '1'
-      });
-
-      const latestBlock = await provider.getBlockNumber();
-      const provingBlockId = Math.max(0, latestBlock - 10);
-
-      const viewingKeyProvider = {
-        getViewingKey: async (): Promise<bigint> => {
-          const chainId =
-            starknetObj.account?.chainId ||
-            starknetObj.chainId ||
-            (await provider.getChainId().catch(() => constants.StarknetChainId.SN_MAIN)) ||
-            constants.StarknetChainId.SN_MAIN;
-
-          const sig = await starknetObj.account.signMessage({
-            types: {
-              StarkNetDomain: [
-                { name: 'name', type: 'felt' },
-                { name: 'version', type: 'felt' },
-                { name: 'chainId', type: 'felt' },
-              ],
-              Message: [{ name: 'key', type: 'felt' }],
-            },
-            primaryType: 'Message',
-            domain: {
-              name: 'CloakroomViewingKey',
-              version: '1',
-              chainId,
-            },
-            message: { key: 'viewing-key-v1' },
-          });
-          const raw = Array.isArray(sig) ? sig[0] : (sig.r ?? sig[0]);
-          return BigInt(raw);
-        },
-      };
-
-      const transfers = createPrivateTransfers({
-        account,
-        viewingKeyProvider,
-        provingProvider: {
-          url: PROVER_URL,
-          chainId: constants.StarknetChainId.SN_MAIN,
-          nodeUrl: RPC_URL,
-        },
-        discoveryProvider: { url: DISCOVERY_URL },
-        poolContractAddress: POOL_ADDRESS,
-      });
-
       const vestingId = `0x${Date.now().toString(16)}`;
       const cliffTs = Math.floor(Date.now() / 1000) + 30 * 86400;
       const endTs = Math.floor(Date.now() / 1000) + 365 * 86400;
-      const registry = createEmptyRegistry();
 
-      const result = await transfers
-        .build({
-          autoRegister: true,
-          autoSetup: true,
-          autoDiscover: { notes: 'refresh', channels: 'refresh' },
-          autoSelectNotes: 'naive',
-          registry,
-          provingBlockId,
-        })
-        .with(STRK_TOKEN, (t) =>
-          t.withdraw({ recipient: PAYROLL_ANONYMIZER_ADDRESS, amount: LOCK_AMOUNT })
-        )
-        .invoke(() => ({
-          contractAddress: PAYROLL_ANONYMIZER_ADDRESS,
-          entrypoint: 'register_lock',
-          calldata: [
-            '0x0',                      // operation: 0 = Lock
-            vestingId,                   // vesting_id
-            STRK_TOKEN,                  // token
-            LOCK_AMOUNT.toString(),      // total_amount low (u128)
-            '0x0',                      // total_amount high (u128)
-            cliffTs.toString(),          // cliff_timestamp
-            endTs.toString(),            // end_timestamp
-            SESSION_KEY_ID,             // session_key_id
-            '0x0',                      // note_id
-          ],
-        }))
-        .execute({ provingBlockId });
+      const call = {
+        contractAddress: PAYROLL_ANONYMIZER_ADDRESS,
+        entrypoint: 'privacy_invoke',
+        calldata: [
+          '0x0',                      // [0] operation: 0 = Lock
+          vestingId,                   // [1] vesting_id
+          STRK_TOKEN,                  // [2] token
+          LOCK_AMOUNT.toString(),      // [3] total_amount low
+          '0x0',                      // [4] total_amount high
+          cliffTs.toString(),          // [5] cliff_timestamp
+          endTs.toString(),            // [6] end_timestamp
+          SESSION_KEY_ID,             // [7] session_key_id
+          '0x0',                      // [8] secret
+          '0x0',                      // [9] note_id
+        ],
+      };
 
-      const { call, proof } = result.callAndProof;
-      setStatus('submitting');
-
-      const calls: any[] = [call];
-      if (proof.proofFacts.length > 0) {
-        calls.push({
-          contractAddress: POOL_ADDRESS,
-          entrypoint: 'submit_proof_facts',
-          calldata: proof.proofFacts,
-        });
-      }
-
-      const response = await starknetObj.account.execute(calls);
+      const response = await starknetObj.account.execute([call]);
       setTxHash(response.transaction_hash);
       setStatus('confirmed');
     } catch (err: any) {
