@@ -1,5 +1,6 @@
-[
-  "0x0799c64eb376609d27d2fe2e837b0f0479a5a6fdcc09b821b6964171ca0d5042",
-  "0x02a4f1731f701495d5c4456cc9a9bb6bcfecbe89dd201c3e0b7166aab9411d62",
-  "0x029c21788c1a6d820c558363872154480f0bdc2272886edc5b5eff05cd9d5e64"
-]
+{
+  "transactions": ["0x0799c64eb376609d27d2fe2e837b0f0479a5a6fdcc09b821b6964171ca0d5042"],
+  "contracts": ["0x0307017665c243d4411aca77db2782e3e8a13c0a9260f5b8ec2956b373909af8"],
+  "demo_video": "https://x.com/cloakroom_xyz/status/2096736078489149713?s=46&t=DxIFn91gqYtxXOxBlYoPuQ",
+  "demo_url": "https://cloakroom-xi.vercel.app"
+}
