@@ -1,15 +1,24 @@
 import { Account, Contract, RpcProvider, constants, type Abi } from "starknet";
+import { setGlobalDispatcher, Agent } from "undici";
+
+// Configure Node undici fetch to allow up to 30 minutes for STWO proof generation
+setGlobalDispatcher(
+  new Agent({
+    headersTimeout: 1_800_000,
+    bodyTimeout: 1_800_000,
+    connectTimeout: 1_800_000,
+  })
+);
+
 import {
   createPrivateTransfers,
   ProvingServiceProofProvider,
-  createEmptyRegistry,
 } from "@starkware-libs/starknet-privacy-sdk";
 import { PrivacyPoolABI } from "@starkware-libs/starknet-privacy-sdk/abi";
 import {
   ContractDiscoveryProvider,
   type PoolContractInterface,
 } from "@starkware-libs/starknet-privacy-sdk/testing";
-import { generateVestingSecret, computeVestingId } from "../src/payroll_engine.js";
 import { toHex } from "../src/felt.js";
 import { loadConfig } from "../src/config.js";
 
@@ -20,15 +29,11 @@ async function main() {
   const privateKey = cfg.privateKey;
   const viewingKey = cfg.viewingKey;
   const poolAddress = toHex(cfg.poolAddress);
-  const tokenAddress = toHex(cfg.tokenAddress);
-  const anonymizerAddress = toHex(cfg.anonymizerAddress!);
   const proverUrl = "http://127.0.0.1:8080";
 
-  console.log("=== Mainnet Real Lock Transaction Execution ===");
+  console.log("=== Mainnet Register (Publish Viewing Key) ===");
   console.log("Account:", accountAddress);
   console.log("Pool:", poolAddress);
-  console.log("Anonymizer:", anonymizerAddress);
-  console.log("Token:", tokenAddress);
   console.log("Viewing Key (bigint):", viewingKey.toString(16));
   console.log("Prover URL:", proverUrl);
 
@@ -53,7 +58,7 @@ async function main() {
     {
       nodeUrl: cfg.rpcUrl,
       poolAddress: poolAddress,
-      requestTimeoutMs: 600_000,
+      requestTimeoutMs: 1_800_000,
     },
   );
 
@@ -71,52 +76,10 @@ async function main() {
   const provingBlockId = Math.max(0, latestBlock - 10);
   console.log(`Using provingBlockId: ${provingBlockId} (latest: ${latestBlock})`);
 
-  const secret = generateVestingSecret();
-  const vestingId = computeVestingId(secret);
-  const lockAmount = 100000000000000000n; // 0.1 STRK (1e17)
-  const nowTs = Math.floor(Date.now() / 1000);
-  const cliffTs = nowTs + 3600; // 1 hour cliff
-  const endTs = nowTs + 30 * 86400; // 30 days
-  const sessionKeyId = "0x636c6f616b726f6f6d2d64656d6f2d31";
-
-  console.log("Generated Secret:", secret.toString(16));
-  console.log("Computed Vesting ID (Poseidon):", toHex(vestingId));
-  console.log("Lock Amount:", lockAmount.toString(), "wei (0.1 STRK)");
-
-  const registry = createEmptyRegistry();
-
-  console.log("\nBuilding Lock transaction via transfers.build()...");
+  console.log("\nBuilding Register transaction via transfers.build({autoRegister: true}).register().execute({provingBlockId})...");
   const result = await transfers
-    .build({
-      autoRegister: true,
-      autoSetup: true,
-      autoDiscover: { notes: "refresh", channels: "refresh" },
-      autoSelectNotes: "naive",
-      registry,
-      provingBlockId,
-    })
-    .with(tokenAddress, (t) =>
-      t.withdraw({
-        recipient: anonymizerAddress,
-        amount: lockAmount,
-      })
-    )
-    .invoke(() => ({
-      contractAddress: anonymizerAddress,
-      entrypoint: "privacy_invoke",
-      calldata: [
-        "0x0",                     // operation: 0 = Lock
-        toHex(vestingId),          // vesting_id
-        tokenAddress,              // token
-        lockAmount.toString(),     // amount (u128)
-        cliffTs.toString(),        // cliff_timestamp
-        endTs.toString(),          // end_timestamp
-        sessionKeyId,              // session_key_id
-        "0x0",                     // secret
-        "0x0",                     // note_id
-        "0x0",                     // batch.len = 0
-      ],
-    }))
+    .build({ autoRegister: true })
+    .register()
     .execute({ provingBlockId });
 
   console.log("Proof and Call generated successfully!");
@@ -128,9 +91,10 @@ async function main() {
   const extra: Record<string, unknown> = {
     tip: 0n,
     proof: proof.data,
+    ...(proof.proofFacts.length > 0 ? { proofFacts: proof.proofFacts } : {}),
   };
 
-  console.log("\nBroadcasting transaction to Starknet Mainnet...");
+  console.log("\nBroadcasting Register transaction to Starknet Mainnet...");
   const tx = await (account.execute as any)(call, extra);
   console.log("Submitted Tx Hash:", tx.transaction_hash);
 
@@ -143,7 +107,7 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("RAW ERROR during Lock execution:");
+  console.error("RAW ERROR during Register execution:");
   console.error(err);
   process.exit(1);
 });

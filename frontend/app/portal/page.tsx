@@ -3,20 +3,41 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { connect, disconnect } from '@starknet-io/get-starknet';
-import { RpcProvider, Account, constants } from 'starknet';
+import { StarknetInjectedWallet } from '@starknet-io/get-starknet-wallet-standard';
+import { RpcProvider, Account, constants, hash, shortString, walletV6 } from 'starknet';
 import {
   createPrivateTransfers,
   createEmptyRegistry,
 } from '@starknet-privacy-sdk/dist';
 
 const POOL_ADDRESS = '0x040337b1af3c663e86e333bab5a4b28da8d4652a15a69beee2b677776ffe812a';
-const PAYROLL_ANONYMIZER_ADDRESS = '0x65e54e30f5b88401a3475f205373c682bc90a8a26bbda1bfbf65c413f29d69c';
+const PAYROLL_ANONYMIZER_ADDRESS = '0x0307017665c243d4411aca77db2782e3e8a13c0a9260f5b8ec2956b373909af8';
 const STRK_TOKEN = '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d';
 const SESSION_KEY_ID = '0x636c6f616b726f6f6d2d64656d6f2d31';
-const LOCK_AMOUNT = BigInt("1000000000000000000");
+const LOCK_AMOUNT = BigInt("100000000000000000"); // 0.1 STRK
 const PROVER_URL = '/api/privacy/prover';
 const DISCOVERY_URL = '/api/privacy/indexer';
 const RPC_URL = '/api/rpc';
+
+const VESTING_COMMITMENT_TAG = BigInt(
+  shortString.encodeShortString("VESTING_COMMITMENT_TAG:V1")
+);
+
+function generateVestingSecret(): bigint {
+  const bytes = new Uint8Array(31);
+  window.crypto.getRandomValues(bytes);
+  let hex = '0x';
+  for (let i = 0; i < bytes.length; i++) {
+    hex += bytes[i].toString(16).padStart(2, '0');
+  }
+  return BigInt(hex);
+}
+
+function computeVestingId(secret: bigint): bigint {
+  return BigInt(
+    hash.computePoseidonHashOnElements([VESTING_COMMITMENT_TAG, secret])
+  );
+}
 
 const truncate = (s: string) => `${s.slice(0, 6)}...${s.slice(-4)}`;
 
@@ -68,7 +89,10 @@ export default function PortalPage() {
       const address = sn.selectedAddress || sn.account?.address;
       if (address) {
         setWalletAddress(address);
-        setStarknetObj(sn);
+        // Wrap the legacy StarknetWindowObject in the Wallet Standard adapter so
+        // that walletV6.strk20PrepareInvoke can read .features["starknet:walletApi"].
+        const walletStandard = new StarknetInjectedWallet(sn);
+        setStarknetObj(walletStandard);
         fetchBalance(address);
       }
     } catch (err) { console.error('Wallet connect failed:', err); }
@@ -82,7 +106,7 @@ export default function PortalPage() {
   };
 
   const executePayroll = async () => {
-    if (!starknetObj?.account) return;
+    if (!starknetObj) return;
     if (!PAYROLL_ANONYMIZER_ADDRESS.startsWith('0x')) {
       setErrorMsg('Payroll anonymizer contract not yet deployed on this network.');
       setStatus('error');
@@ -112,12 +136,110 @@ export default function PortalPage() {
         ],
       };
 
-      const response = await starknetObj.account.execute([call]);
+      const response = await walletV6.addInvokeTransaction(starknetObj, {
+        calls: [{
+          contract_address: call.contractAddress,
+          entry_point: call.entrypoint,
+          calldata: call.calldata as string[],
+        }]
+      });
       setTxHash(response.transaction_hash);
       setStatus('confirmed');
     } catch (err: any) {
       console.error('Execution failed:', err);
       setErrorMsg(err?.message ?? 'Transaction failed. See console for details.');
+      setStatus('error');
+    }
+  };
+
+  const executeDryRun = async () => {
+    if (!starknetObj) return;
+    if (!PAYROLL_ANONYMIZER_ADDRESS.startsWith('0x')) {
+      setErrorMsg('Payroll anonymizer contract not yet deployed on this network.');
+      setStatus('error');
+      return;
+    }
+    setStatus('proving'); setErrorMsg(null); setTxHash(null);
+
+    try {
+      // Generate real 31-byte secret and Poseidon-based vesting ID, just like payroll_engine.ts
+      const secretInt = generateVestingSecret();
+      const secret = '0x' + secretInt.toString(16);
+      const vestingId = '0x' + computeVestingId(secretInt).toString(16);
+      
+      // Save it to console so the user has a durable copy during this test
+      console.log('=== RETAIN THIS SECRET ===');
+      console.log('Secret:', secret);
+      console.log('Vesting ID:', vestingId);
+      console.log('==========================');
+      
+      const cliffTs = Math.floor(Date.now() / 1000) + 30 * 86400;
+      const endTs = Math.floor(Date.now() / 1000) + 365 * 86400;
+
+      const normalizeHex = (value: string | bigint | number) => '0x' + BigInt(value).toString(16);
+
+      // The "transfer" + "invoke" pair creates a note and consumes it, moving funds through the pool.
+      const actions: any[] = [
+        {
+          type: 'transfer',
+          token: normalizeHex(STRK_TOKEN),
+          amount: 'OPEN',
+          recipient: normalizeHex(walletAddress!)
+        },
+        {
+          type: 'invoke',
+          contract: normalizeHex(PAYROLL_ANONYMIZER_ADDRESS),
+          calldata: [
+            '0x0',                              // [0] operation: 0 = Lock
+            normalizeHex(vestingId),            // [1] vesting_id
+            normalizeHex(STRK_TOKEN),           // [2] token
+            normalizeHex(LOCK_AMOUNT),          // [3] total_amount (single value)
+            normalizeHex(cliffTs),              // [4] cliff_timestamp
+            normalizeHex(endTs),                // [5] end_timestamp
+            normalizeHex(SESSION_KEY_ID),       // [6] session_key_id
+            '0x0',                              // [7] secret (unused in Lock)
+            '0x0',                              // [8] note_id (unused in Lock)
+            '0x0'                               // [9] batch / batch.len (unused in Lock)
+          ]
+        }
+      ];
+
+      // --- WALLET IDENTITY LOGGING ---
+      const inj = (starknetObj as any).injected ?? starknetObj;
+      console.log('[wallet-id] name:', inj?.name, '| id:', inj?.id, '| version:', inj?.version);
+      console.log('[wallet-id] features keys:', Object.keys((starknetObj as any).features ?? {}));
+      console.log('[wallet-id] walletApi feature:', (starknetObj as any).features?.['starknet:walletApi']);
+      // --------------------------------
+      console.log('Dry running strk20PrepareInvoke with actions:', actions);
+      
+      const prepared = await walletV6.strk20PrepareInvoke(starknetObj, actions, true);
+      
+      console.log('Raw prepared result:', prepared);
+      alert('Dry Run successful! Check console for raw result.\n' + JSON.stringify(prepared, null, 2));
+      setStatus('idle');
+    } catch (err: any) {
+      console.error('Dry Run execution failed:', err);
+      console.dir(err, { depth: null });
+      if (err?.cause) console.log('Error cause:', err.cause);
+      if (err?.details) console.log('Error details:', err.details);
+      
+      setErrorMsg(err?.message ?? 'Dry Run failed. See console for details.');
+      setStatus('error');
+    }
+  };
+
+  const checkRegistration = async () => {
+    if (!starknetObj) return;
+    setStatus('proving'); setErrorMsg(null); setTxHash(null);
+    try {
+      console.log('Checking STRK20 balances...');
+      const balances = await walletV6.strk20Balances(starknetObj, [STRK_TOKEN]);
+      console.log('strk20Balances result:', balances);
+      alert('Registration Check Successful!\n' + JSON.stringify(balances, null, 2));
+      setStatus('idle');
+    } catch (err: any) {
+      console.error('strk20Balances failed:', err);
+      setErrorMsg(err?.message ?? 'Registration Check failed. See console for details.');
       setStatus('error');
     }
   };
@@ -170,6 +292,22 @@ export default function PortalPage() {
               </div>
             )}
           </div>
+
+          <button
+            onClick={checkRegistration}
+            disabled={status === 'proving' || status === 'submitting'}
+            className="w-full bg-[#93C5FD] text-black font-bold py-4 px-8 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-2"
+          >
+            CHECK REGISTRATION
+          </button>
+
+          <button
+            onClick={executeDryRun}
+            disabled={status === 'proving' || status === 'submitting'}
+            className="w-full bg-[#E9D5FF] text-black font-bold py-4 px-8 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-2"
+          >
+            TEST DRY RUN
+          </button>
 
           <button
             onClick={executePayroll}

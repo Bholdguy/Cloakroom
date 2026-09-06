@@ -22,7 +22,8 @@
     "@starkware-libs/starknet-privacy-sdk": "file:vendor/starknet-privacy/sdk",
     "csv-parse": "*",
     "dotenv": "*",
-    "starknet": "10.4.0"
+    "starknet": "10.4.0",
+    "undici": "^8.10.2"
   },
   "devDependencies": {
     "@types/node": "24.10.2",
